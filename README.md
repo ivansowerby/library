@@ -54,9 +54,20 @@ import library
 Then when the library is required:
 
 ``` python
-exec(library(__FILE_NAME__))
+exec(library.fetch(__FILE_NAME__))
 ```
 
+<b><h3>EXAMPLE</h3><b>
+``` python
+import library
+for lib in ('ascii.py', 'cli.py'):
+    exec(library.fetch(lib))
+
+s = 'Hello, World!'
+while True:
+    s = ascii.rotate(s, 1)
+    cli.clear()
+```
 
 <b><h2 style="text-align:center">License (MIT)</h3></b>
 

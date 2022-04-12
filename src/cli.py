@@ -1,5 +1,7 @@
 from os import system, name
 
-def clear():
-    if name == 'nt': system('cls')
-    else: system('clear')
+class cli:
+    def clear() -> None:
+        if name == 'nt': system('cls')
+        else: system('clear')
+        return None
