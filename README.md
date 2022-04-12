@@ -1,6 +1,6 @@
 <h1>Library</h1>
 
-<p style="text-align:right">Revision for 0.0.3</p>
+<p style="text-align:right">Revision for 0.1.0</p>
 
 ### List of contents:
 1. Brief Introduction
@@ -17,55 +17,71 @@ A <i>library</i> of useful python scripts, to be executed by a HTTPS request to 
 
 ---
 
-<i>Library</i> can either be utilised by downloading the relevant code locally or rather (as suggested below) by sending a HTTPS request to the raw URL, to then execute that locally with the <i>exec()</i> function.
+<i>Library</i> can either be utilised by downloading the relevant <i>libs</i> locally or rather (as suggested below) by sending a HTTP request to the raw URL, to then execute that locally with the <i>exec()</i> function.
 
 Shown below is the code contained within [library.py](https://raw.githubusercontent.com/ivanl-exe/library/main/library.py), which should be downloaded and placed in the same directory as it is wished to be used.
 
 ``` python
 import requests
 
-URL = 'https://raw.githubusercontent.com/ivanl-exe/library/main/src/'
+URL = 'https://raw.githubusercontent.com/ivanl-exe/library/main/libs/'
 
-def fetch(filename: str, execute_locally: bool = None) -> str:
-    if execute_locally == None:
-        execute_locally = False
-    
-    if filename.find('.py') == -1:
-        filename += '.py'
-    main_url = URL
-    if URL.rfind('/') != len(URL) - 1:
-        main_url += '/'
+def __format_name__(name: str) -> str:
+    if name.find('.py') == -1:
+        name += '.py'
+    return name
+
+def __format_dir__(dir: str) -> str:
+    if dir.rfind('/') != len(dir) - 1:
+        dir += '/'
+    return dir
+
+def borrow(filename: str) -> str:
+    filename = __format_name__(filename)
+    main_url = __format_dir__(URL)
 
     response = requests.get(f'{main_url}{filename}')
     if response.status_code == 200:
         code = response.text
-        if execute_locally == True:
-            exec(code)
         return code
+
+def save(filename: str, save_directory: str = ''):
+    filename = __format_name__(filename)
+    save_directory = f'{__format_dir__(save_directory)}{filename}'
+    
+    code = borrow(filename)
+    file = open(save_directory, 'w')
+
+    file.write(
+        '\n'.join([l.replace('    ', '', 1) for l in code.split('\n') if l.find('class') == -1])
+    )
+    return code
 ```
 
-- Or alternatively the code can be pasted into the main python file with the argument <i>execute_locally = True</i>, not requiring <i>import library</i> or <i>exec()</i>.
+---
 
-In the main python file of the application append:
+At the start of the python application import the <i>library</i>.py file to utilise the functions. Specify the file location if not in the current working directory (<i>pwd</i>)
 
 ~~~ python
 import library
 ~~~
 
+---
 
-Then when the library is required:
+<b><h3>library.borrow</h3></b>
+
 
 ``` python
-exec(library.fetch(__FILE_NAME__))
+exec(library.borrow(__FILE_NAME__))
 ```
 
-<b><h3>EXAMPLE</h3></b>
+<h3>Example</h3>
 
 ``` python
 from time import sleep
 import library
 for lib in ('ascii.py', 'cli.py'):
-    exec(library.fetch(lib))
+    exec(library.borrow(lib))
 
 s = 'Hello, World!'
 while True:
@@ -73,6 +89,24 @@ while True:
     s = ascii.rotate(s, 1)
     print(s, end = '')
     sleep(0.1)
+```
+
+---
+
+<b><h3>library.save</h3></b>
+
+``` python
+exec(library.save(__FILE_NAME__[, __DIRECTORY__]))
+```
+
+<h3>Example</h3>
+
+``` python
+import library
+
+for lib in ('ascii.py', 'cli.py'):
+    library.save(lib)
+    print(f'{lib} successfully saved to the pwd')
 ```
 
 <b><h2 style="text-align:center">License (MIT)</h3></b>
