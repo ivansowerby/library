@@ -11,7 +11,7 @@
 
 ---
 
-A <i>library</i> of useful python scripts, to be executed by a HTTPS request to the raw URL of the python file. Due to be updated (without notice) regularly as more scripts are introduced, however preceding files will be kept in their respective directories.
+A <i>library</i> of useful python scripts, to be executed by a HTTP request to the raw URL of the python file. Due to be updated (without notice) regularly as more scripts are introduced, however preceding files will be kept in their respective directories.
 
 <b><h2 style="text-align:center">Instructions</h3></b>
 
@@ -68,14 +68,14 @@ import library
 
 ---
 
-<b><h3>library.borrow</h3></b>
+<b><h3>library.borrow()</h3></b>
 
 
 ``` python
 exec(library.borrow(__FILE_NAME__))
 ```
 
-<h3>Example</h3>
+* <b>Example</b>
 
 ``` python
 from time import sleep
@@ -93,13 +93,13 @@ while True:
 
 ---
 
-<b><h3>library.save</h3></b>
+<b><h3>library.save()</h3></b>
 
 ``` python
 exec(library.save(__FILE_NAME__[, __DIRECTORY__]))
 ```
 
-<h3>Example</h3>
+* <b>Example</b>
 
 ``` python
 import library
