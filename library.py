@@ -1,6 +1,6 @@
 import requests
 
-URL = 'https://raw.githubusercontent.com/ivanl-exe/library/main/src/'
+URL = 'https://raw.githubusercontent.com/ivanl-exe/library/main/libs/'
 
 def fetch(filename: str, execute_locally: bool = None) -> str:
     if execute_locally == None:

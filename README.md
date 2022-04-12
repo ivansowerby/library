@@ -1,10 +1,10 @@
 <h1>Library</h1>
 
-<p style="text-align:right">Revision for 0.0.1</p>
+<p style="text-align:right">Revision for 0.0.3</p>
 
 ### List of contents:
 1. Brief Introduction
-2. How to Use
+2. Instructions
 3. Legal (MIT license)
 
 <b><h2 style="text-align:center">Brief Introduction</h3></b>
@@ -13,11 +13,13 @@
 
 A <i>library</i> of useful python scripts, to be executed by a HTTPS request to the raw URL of the python file. Due to be updated (without notice) regularly as more scripts are introduced, however preceding files will be kept in their respective directories.
 
-<b><h2 style="text-align:center">How to Use</h3></b>
+<b><h2 style="text-align:center">Instructions</h3></b>
 
-<i>Library</i> can either be utilised by downloading the relevant code locally or rather as suggested below by sending a HTTPS request to the raw URL, to then execute that locally with the <i>exec()</i> function.
+---
 
-Shown below is the code contained within [library.py](https://raw.githubusercontent.com/ivanl-exe/library/main/how_to_use/library.py), which should be downloaded and placed in the same directory as it is wished to be used.
+<i>Library</i> can either be utilised by downloading the relevant code locally or rather (as suggested below) by sending a HTTPS request to the raw URL, to then execute that locally with the <i>exec()</i> function.
+
+Shown below is the code contained within [library.py](https://raw.githubusercontent.com/ivanl-exe/library/main/library.py), which should be downloaded and placed in the same directory as it is wished to be used.
 
 ``` python
 import requests
@@ -42,9 +44,9 @@ def fetch(filename: str, execute_locally: bool = None) -> str:
         return code
 ```
 
-- Or alternatively the code can be pasted into the main python file with the argument <i>execute_locally</i> = True, and no need for importing.
+- Or alternatively the code can be pasted into the main python file with the argument <i>execute_locally = True</i>, not requiring <i>import library</i> or <i>exec()</i>.
 
-Then in the main file of the application apply:
+In the main python file of the application append:
 
 ~~~ python
 import library
@@ -57,16 +59,20 @@ Then when the library is required:
 exec(library.fetch(__FILE_NAME__))
 ```
 
-<b><h3>EXAMPLE</h3><b>
+<b><h3>EXAMPLE</h3></b>
+
 ``` python
+from time import sleep
 import library
 for lib in ('ascii.py', 'cli.py'):
     exec(library.fetch(lib))
 
 s = 'Hello, World!'
 while True:
-    s = ascii.rotate(s, 1)
     cli.clear()
+    s = ascii.rotate(s, 1)
+    print(s, end = '')
+    sleep(0.1)
 ```
 
 <b><h2 style="text-align:center">License (MIT)</h3></b>
