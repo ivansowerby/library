@@ -1,10 +1,10 @@
 import requests
 
-URL = 'https://raw.githubusercontent.com/ivanl-exe/library/main/libs/'
+BASE_URL = 'https://raw.githubusercontent.com/ivanl-exe/library/main/catalog/'
 
 def __format_name__(name: str) -> str:
-    if name.find('.py') == -1:
-        name += '.py'
+    if name[-4:].find('.txt') == -1:
+        name += '.txt'
     return name
 
 def __format_dir__(dir: str) -> str:
@@ -13,17 +13,23 @@ def __format_dir__(dir: str) -> str:
     return dir
 
 def borrow(filename: str) -> str:
-    filename = __format_name__(filename)
-    main_url = __format_dir__(URL)
+    url = ''.join([
+        __format_dir__(BASE_URL),
+        __format_name__(filename)
+    ])
 
-    response = requests.get(f'{main_url}{filename}')
-    if response.status_code == 200:
-        code = response.text
-        return code
+    for i in range(2):
+        response = requests.get(url)
+        if response.status_code != 200: return ''
+        if i == 1:
+            code = response.text
+            break
+        url = response.text
+    return code
 
 def save(filename: str, save_directory: str = ''):
     filename = __format_name__(filename)
-    save_directory = f'{__format_dir__(save_directory)}{filename}'
+    save_directory = ''.join([__format_dir__(save_directory), filename])
     
     code = borrow(filename)
     file = open(save_directory, 'w')

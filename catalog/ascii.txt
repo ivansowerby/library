@@ -1,0 +1,1 @@
+https://raw.githubusercontent.com/ivanl-exe/std-libs/main/src/ascii.py

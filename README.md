@@ -1,6 +1,6 @@
 <h1>Library</h1>
 
-<p style="text-align:right">Revision for 0.1.0</p>
+<p style="text-align:right">Revision for 0.2.0</p>
 
 ### List of contents:
 1. Brief Introduction
@@ -11,24 +11,25 @@
 
 ---
 
-A <i>library</i> of useful python scripts, to be executed by a HTTP request to the raw URL of the python file. Due to be updated (without notice) regularly as more scripts are introduced, however preceding files will be kept in their respective directories.
+A <i>library</i> of useful python scripts imported through HTTP requests to the catalog, a dictionary of raw URLs to scripts; maintained and contributed to by the open-source community.
+* Due to be updated (without notice) regularly as more scripts are introduced, <b>however the community should aim to keep existing files in their respective directories</b>.
 
 <b><h2 style="text-align:center">Instructions</h3></b>
 
 ---
 
-<i>Library</i> can either be utilised by downloading the relevant <i>libs</i> locally or rather (as suggested below) by sending a HTTP request to the raw URL, to then execute that locally with the <i>exec()</i> function.
+<i>Library</i> can either be utilised by downloading the relevant <i>libs</i> locally or rather (as suggested below) by sending a HTTP request to the raw <i>catalog</i> URL (which itself redirects to the relevant python script/s), to then execute that locally with the <i>exec()</i> function.
 
 Shown below is the code contained within [library.py](https://raw.githubusercontent.com/ivanl-exe/library/main/library.py), which should be downloaded and placed in the same directory as it is wished to be used.
 
 ``` python
 import requests
 
-URL = 'https://raw.githubusercontent.com/ivanl-exe/library/main/libs/'
+BASE_URL = 'https://raw.githubusercontent.com/ivanl-exe/library/main/catalog/'
 
 def __format_name__(name: str) -> str:
-    if name.find('.py') == -1:
-        name += '.py'
+    if name[-4:].find('.txt') == -1:
+        name += '.txt'
     return name
 
 def __format_dir__(dir: str) -> str:
@@ -37,17 +38,23 @@ def __format_dir__(dir: str) -> str:
     return dir
 
 def borrow(filename: str) -> str:
-    filename = __format_name__(filename)
-    main_url = __format_dir__(URL)
+    url = ''.join([
+        __format_dir__(BASE_URL),
+        __format_name__(filename)
+    ])
 
-    response = requests.get(f'{main_url}{filename}')
-    if response.status_code == 200:
-        code = response.text
-        return code
+    for i in range(2):
+        response = requests.get(url)
+        if response.status_code != 200: return ''
+        if i == 1:
+            code = response.text
+            break
+        url = response.text
+    return code
 
 def save(filename: str, save_directory: str = ''):
     filename = __format_name__(filename)
-    save_directory = f'{__format_dir__(save_directory)}{filename}'
+    save_directory = ''.join([__format_dir__(save_directory), filename])
     
     code = borrow(filename)
     file = open(save_directory, 'w')
@@ -80,7 +87,7 @@ exec(library.borrow(__FILE_NAME__))
 ``` python
 from time import sleep
 import library
-for lib in ('ascii.py', 'cli.py'):
+for lib in ('ascii', 'cli'):
     exec(library.borrow(lib))
 
 s = 'Hello, World!'
@@ -104,7 +111,7 @@ exec(library.save(__FILE_NAME__[, __DIRECTORY__]))
 ``` python
 import library
 
-for lib in ('ascii.py', 'cli.py'):
+for lib in ('ascii', 'cli'):
     library.save(lib)
     print(f'{lib} successfully saved to the pwd')
 ```
